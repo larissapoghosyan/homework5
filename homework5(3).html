@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+
+
+
+<canvas id = "idcanvas"></canvas>
+<script>
+
+    canvas = document.getElementById("idcanvas");
+    const context = canvas.getContext("2d");
+
+    canvas.width =970;
+    canvas.height =600;
+
+    	const background = new Image ();
+  background.src = "https://wallpaper.wiki/wp-content/uploads/2017/04/wallpaper.wiki-Campfire-Background-HD-PIC-WPB0012841-1.jpg";
+
+
+    const myHero = new Image();
+    myHero.src = "https://mbtskoudsalg.com/images/ninja-transparent-png-2.png";
+
+    const badGuy = new Image();
+    badGuy.src = "https://upload.wikimedia.org/wikipedia/commons/8/88/Villianc_transparent_background.svg";
+
+
+
+     const rand = function(num) {
+     return Math.floor(Math.random() * num) + 1;
+     };
+
+
+
+
+    const hero = {
+		x: 7,
+		y: 300,
+		xDelta:1,
+        yDelta:1,
+		width: 90,
+		height: 95,
+		image: myHero,
+		draw: function() {
+            context.drawImage(this.image,this.x,this.y,this.width,this.height)
+        },
+		update: function(){
+         this.x += this.xDelta;
+         this.y += this.yDelta;
+         if(this.x > canvas.width || this.x < 0 ){
+            this.xDelta *= -1;
+            this.yDelta *= 1;
+        }
+        if(this.y > canvas.height || this.y < 0){
+            this.yDelta *= -1;
+            this.yDelta *=1
+        }
+
+        }
+     };
+     
+
+
+     const createBadGuy = function(count, canvasWidth, canvasHeight){
+        const arr = [];
+
+        for (let i = 0; i < count; i++) {
+            const  badGuyWidth  = 70;
+            const badGuyHeight = 140; 
+            arr[arr.length] =  {
+                width: badGuyWidth ,
+                height: badGuyHeight ,
+                x:rand(canvasWidth-badGuyWidth ),
+                y:rand(canvasHeight-badGuyHeight ),
+                delta: 5,
+                xDelta:1,
+                yDelta:1,
+                image:badGuy,
+                draw: function() {
+                    context.drawImage(this.image,this.x,this.y,this.width,this.height);
+                },
+                update: function(){   
+                    this.x += this.xDelta * this.delta;
+                    this.y += this.yDelta * this.delta;
+                    if(this.x >= canvas.width-this.width){
+                     this.xDelta = -1;
+                   } else if(this.x <= 0){
+                     this.xDelta = 1;
+                    }
+              
+                    if(this.y >= canvas.height-this.height){
+                     this.yDelta = -1;
+                    }else if(this.y <= 0) {
+                     this.yDelta = 1;
+                   }
+                    
+                }
+            }
+
+    };
+    
+    return arr;
+
+    };  
+
+
+    const leftKey = 37;
+    const upKey = 38;
+    const rightKey = 39;
+    const downKey = 40;
+
+    document.addEventListener('keydown', function(event) {
+        const n = 7;
+        console.log(hero.x, hero.xDelta, hero.y, hero.yDelta)
+
+
+
+        if(event.keyCode === rightKey) {
+            hero.xDelta=n;
+        };
+        
+       if (event.keyCode===leftKey) {
+            hero.xDelta =- n;
+        };
+
+        
+
+       
+
+        if(event.keyCode === upKey){
+            hero.yDelta= -n;
+        };
+        if(event.keyCode === downKey){
+            hero.yDelta= n;
+        };
+        
+
+
+        if(hero.x >= canvas.width-hero.width && hero.y >= canvas.height - hero.height){
+            hero.y = 0;
+            hero.x = 0;
+        };
+        
+    }, false);
+
+    document.addEventListener('keyup', function(event) {
+       
+            hero.xDelta=0;
+            hero.yDelta=0;
+    }, false);
+
+
+const badGuysReady = createBadGuy(4,canvas.width,canvas.height) ;
+       
+const draw = function(){
+    hero.draw();
+    for (let i = 0; i < badGuysReady.length; i++) {
+        badGuysReady[i].draw();
+    }
+};
+   
+const update = function(){
+    hero.update();
+    for (let i = 0; i < badGuysReady.length; i++) {
+        badGuysReady[i].update();
+    }
+};
+
+    const finish = function(){
+        for (let i = 0; i < badGuysReady.length; i++) {
+        if(hero.x < badGuysReady[i].x + badGuysReady[i].width  && hero.x + hero.width > badGuysReady[i].x &&
+        hero.y < badGuysReady[i].y + badGuysReady[i].height && hero.y + hero.height > badGuysReady[i].y ){
+            hero.x=10;
+            hero.y=400;
+            hero.xDelta=0;
+            hero.yDelta=0;
+            alert("poor boi, try again");
+
+
+            }
+    };
+}
+
+
+    const loop = function(){
+        context.drawImage(background, 0, 0,canvas.width,canvas.height);
+        draw();
+        update();
+        finish();
+        requestAnimationFrame(loop);
+        
+    };
+    loop();
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
