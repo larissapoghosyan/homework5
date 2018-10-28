@@ -50,11 +50,11 @@
 		update: function(){
          this.x += this.xDelta;
          this.y += this.yDelta;
-         if(this.x > canvas.width || this.x < 0 ){
+         if(this.x > canvas.width || this.x <= 0 ){
             this.xDelta *= -1;
             this.yDelta *= 1;
         }
-        if(this.y > canvas.height || this.y < 0){
+        if(this.y > canvas.height || this.y <= 0){
             this.yDelta *= -1;
             this.yDelta *=1
         }
@@ -68,8 +68,8 @@
         const arr = [];
 
         for (let i = 0; i < count; i++) {
-            const  badGuyWidth  = 70;
-            const badGuyHeight = 140; 
+            const  badGuyWidth  = 80;
+            const badGuyHeight = 130; 
             arr[arr.length] =  {
                 width: badGuyWidth ,
                 height: badGuyHeight ,
@@ -114,7 +114,7 @@
 
     document.addEventListener('keydown', function(event) {
         const n = 7;
-        console.log(hero.x, hero.xDelta, hero.y, hero.yDelta)
+ 
 
 
 
@@ -137,12 +137,6 @@
             hero.yDelta= n;
         };
         
-
-
-        if(hero.x >= canvas.width-hero.width && hero.y >= canvas.height - hero.height){
-            hero.y = 0;
-            hero.x = 0;
-        };
         
     }, false);
 
